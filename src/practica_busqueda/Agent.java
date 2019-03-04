@@ -1,4 +1,4 @@
-package gallegosalidofrancisco;
+package practica_busqueda;
 
 import core.game.Observation;
 import core.game.StateObservation;
