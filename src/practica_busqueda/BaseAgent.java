@@ -10,8 +10,8 @@ import core.game.StateObservation;
 import java.util.ArrayList;
 import java.awt.Dimension;
 
-// Agente base para el juego número 11. Implementa métodos específicos
-// para obtener información de ese juego exclusivamente. Heredar de esta clase
+// Agente base para los juegos números 11 y 10. Implementa métodos específicos
+// para obtener información en esos juegos exclusivamente. Heredar de esta clase
 // para crear un jugador personalizado para el juego.
 
 public abstract class BaseAgent extends AbstractPlayer{
@@ -42,18 +42,28 @@ public abstract class BaseAgent extends AbstractPlayer{
         
         finalGrid = new ArrayList[width][height];
         
+        Observation new_obs;
+        
         for (int y = 0; y < height; y++)
             for (int x = 0; x < width; x++){
                 finalGrid[x][y] = new ArrayList<Observation>();
                         
                 if (!grid[x][y].isEmpty()){              
                     
-                    for(core.game.Observation obs : grid[x][y])
-                        finalGrid[x][y].add(new Observation(obs, stateObs.getBlockSize()));
+                    for(core.game.Observation obs : grid[x][y]){
+                        new_obs = new Observation(obs, stateObs.getBlockSize());
+                        
+                        // <Solución bug forward model>
+                        if (new_obs.getType() != null) // Compruebo que sea una observación válida 
+                            finalGrid[x][y].add(new_obs);
+                    }
                 }
                 else{
                     finalGrid[x][y].add(new Observation(x, y, ObservationType.EMPTY));
                 }
+                
+                if (finalGrid[x][y].isEmpty()) // Debido al bug puede que ahora esté vacío
+                    finalGrid[x][y].add(new Observation(x, y, ObservationType.EMPTY));
             }
         
         return finalGrid;
@@ -65,11 +75,17 @@ public abstract class BaseAgent extends AbstractPlayer{
         ArrayList<core.game.Observation>[] npcs = stateObs.getNPCPositions();
         ArrayList<Observation>[] finalNpcs = new ArrayList[npcs.length];
         
+        Observation new_obs;
+        
         for (int enemyType = 0; enemyType < npcs.length; enemyType++){
             finalNpcs[enemyType] = new ArrayList<Observation>();
             
-            for (core.game.Observation obs : npcs[enemyType])
-                finalNpcs[enemyType].add(new Observation(obs, stateObs.getBlockSize()));           
+            for (core.game.Observation obs : npcs[enemyType]){
+                new_obs = new Observation(obs, stateObs.getBlockSize());
+                
+                if (new_obs.getType() != null)
+                    finalNpcs[enemyType].add(new_obs); 
+            }
         }
         
         return finalNpcs;
@@ -106,8 +122,14 @@ public abstract class BaseAgent extends AbstractPlayer{
         ArrayList<core.game.Observation>[] gems = stateObs.getResourcesPositions();
         ArrayList<Observation> finalGems = new ArrayList<Observation>();
 
-        for (core.game.Observation obs : gems[0])
-            finalGems.add(new Observation(obs, stateObs.getBlockSize()));
+        Observation new_obs;
+        
+        for (core.game.Observation obs : gems[0]){
+            new_obs = new Observation(obs, stateObs.getBlockSize());
+            
+            if (new_obs.getType() != null)
+                finalGems.add(new_obs);
+        }
         
         return finalGems;
     }
@@ -145,9 +167,15 @@ public abstract class BaseAgent extends AbstractPlayer{
         ArrayList<core.game.Observation>[] boulders = stateObs.getMovablePositions();
         ArrayList<Observation> finalBoulders = new ArrayList<Observation>();
 
-        for (core.game.Observation obs : boulders[0])
-            finalBoulders.add(new Observation(obs, stateObs.getBlockSize()));
+        Observation new_obs;
         
+        for (core.game.Observation obs : boulders[0]){
+            new_obs = new Observation(obs, stateObs.getBlockSize());
+                
+            if (new_obs.getType() != null)
+                finalBoulders.add(new_obs);
+        }
+            
         return finalBoulders;
     }
     

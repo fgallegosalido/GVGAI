@@ -28,7 +28,8 @@ public class Test {
 		// Agentes de las prácticas
 		String agenteTutorial1 = "gallegosalidofrancisco.Agent";
 		String agenteDemo = "practica_busqueda.DemoAgent";
-		
+		String agenteInformacion = "practica_busqueda.InformationAgent";
+
 		// Agente a ejecutar
 		String agenteActual = agenteDemo;
 
