@@ -25,11 +25,12 @@ public class Test {
         String sampleRHEAController = "tracks.singlePlayer.advanced.sampleRHEA.Agent";
 		String sampleOLETSController = "tracks.singlePlayer.advanced.olets.Agent";
 
-		// Agente del tutorial 1
+		// Agentes de las prácticas
 		String agenteTutorial1 = "gallegosalidofrancisco.Agent";
-
+		String agenteDemo = "practica_busqueda.DemoAgent";
+		
 		// Agente a ejecutar
-		String agenteActual = agenteTutorial1;
+		String agenteActual = agenteDemo;
 
 		//Load available games
 		String spGamesCollection =  "examples/all_games_sp.csv";
